@@ -7,19 +7,16 @@ import ex45_entry_desc
 class Engine(object):
         
     def __init__(self, fates_map):
-        #import dict, make usable
         self.fates_map = fates_map
         
     def play(self):
-        #use dict to create instance of init_fates_name func.
+        #We want the engine to stop moving us along when we reach the last apt.
         current_apt = self.fates_map.init_fates_name() 
         last_apt = self.fates_map.ret_fates_name('lease_signed')
         
         
         while current_apt != last_apt:
-	    #Instantiate var fed into __init__ func call it
-            #with dict val.
-            next_apt_name = current_apt.arrive()
+            next_apt_name = current_apt.cont_prompt()
             next_apt_name = current_apt.enter()
           
             current_apt = self.fates_map.ret_fates_name(next_apt_name)   
@@ -27,8 +24,8 @@ class Engine(object):
 
 class Apartment(object):
     
-    def arrive(self):
-        #Housing for repetitive option to give up or go on
+    def cont_prompt(self):
+        #Housing this question here saves its' repetition in each class.
         print "Do you want to give up or go on to the next?"
         
         answer = raw_input("> ")
@@ -50,8 +47,8 @@ class Apartment(object):
         
 class EvilLandlord(Apartment):
 
-    def arrive(self):
-        #Overwrite Supers arrive func then pass over it.
+    def cont_prompt(self):
+        #We don't want cont_prompt method to be called here.
         pass
 
     def enter(self):
@@ -60,7 +57,7 @@ class EvilLandlord(Apartment):
         question = raw_input("Do you have any questions? > ")
         
         while question != "no":
-        
+        #The loop allows many questions to be asked.
             if "safe" in question:
                 print """We haven't had any break-ins here since
                       installing the bars over the back window.
@@ -84,6 +81,7 @@ class EvilLandlord(Apartment):
                            
         lease = raw_input("Great would you like to go ahead and sign your lease? > ")
         
+        #To determine good/bad fate and move player onto next apt.
         if lease == "yes":
             print ex45_fates.bad_fate
             exit(1)
@@ -99,14 +97,16 @@ class EvilLandlord(Apartment):
             
                 
 class Ghetto(Apartment):
-
+#The cont_prompt method is not needed from here on out
+#as it is required to be used in the same, repetitious
+#manner.
     def enter(self):
         print ex45_entry_desc.ghetto
                  
         question = raw_input("Do you have any questions? > ")
         
         while question != "no":
-                   
+        #The loop allows many questions to be asked.       
             if "safe" in question:
                 print """Well this ain't Beverly Hills, though I suppose if you
                       could afford Beverly Hills you wouldn't be here. Am I
@@ -178,7 +178,7 @@ class OurNewHome(Apartment):
         question = raw_input("Do you have any questions? > ")
         
         while question != "no":
-                   
+        #The loop allows many questions to be asked.           
             if "safe" in question:
                 print """This is one of the safer neighborhoods in the area."""
 	    elif "yes" in question:
@@ -226,7 +226,7 @@ class Closet(Apartment):
         question = raw_input("Do you have any questions? > ")
         
         while question != "no":
-                   
+        #The loop allows many questions to be asked.           
             if "safe" in question:
                 print """Well, its high visibility so that's gotta count for 
                       something but you aren't moving into the suburbs here
@@ -282,29 +282,32 @@ class BunkingWithStrangers(Apartment):
         print ex45_entry_desc.bunking_with_strangers
               
         choice = raw_input("Do you ring the doorbell? >")
-              
+        #This is the only apartment in the game where the option to back
+        #out is given before entering.
+        
         if choice == "yes":
-            self.part_2()
+            self.enter_2()
         elif choice == "no":
             return "middle_of_nowhere"
         else:
             print "come again?"
             self.enter()
 
-    def part_2(self):
-        print ex45_entry_desc.part_2
+    def enter_2(self):
+        print ex45_entry_desc.enter_2
               
         choice = raw_input("Do you wait? >")
-              
+        #Giving player another chance to leave.
+        
         if choice == "no":
-            self.lease()
+            self.enter_3()
         elif choice == "yes":
             self.roomie()
         else:
             print "Come again?"
             self.next()  
 
-    def lease(self):
+    def enter_3(self):
         print """Okay. Do you want to sign the lease? I got it ready
               for you, you know, just in case.
               """
@@ -315,45 +318,49 @@ class BunkingWithStrangers(Apartment):
             print ex45_fates.bad_fate
         elif choice == "no":
             return "middle_of_nowhere"
+        elif choice == "move on":
+            print "It looks like you'll be living out of your car for a while. You lose."
+	    exit(1)	  
         else:
             print "sorry?"
-            self.lease()     
+            self.enter_3()     
             
-    def roomie(self):
-        print ex45_entry_desc.roomie
+    def enter_4(self):
+        print ex45_entry_desc.enter_4
         
         question = raw_input("Do you have any questions?  >")
         
         while question != "no":
-	  
-	  if question == "yes":
-	      print "Great, what is your question?"
-	  elif question == "How many people live here?":
-	      print """7 so far. Three people in the old dining room, a couple in the bedroom
-	            and a couple in the coverted attic space.
-	            """	  
+	#The loop allows many questions to be asked  
+	  if "safe" in question:
+	      print """Oh yeah, this is a quiet neighborhood. There
+		    are a couple of families on this block and we're
+		    all packed in so tight here that it feels like
+		    there's always someone around, you know?
+		    """
+	  elif "how many" in question:
+	      print """7 so far. Three people in the old dining room, 
+		    a couple in the bedroom and a couple in the coverted 
+		    attic space. Our game nights are off the hook!
+	            """	
+          elif "laundry" in question:
+	      print """Um, we use the laundrymat up on 7th. It's actually
+		    the closest one, if you can believe that. Um, yeah.
+		    laundry is kind of a pain in the but, but that's 
+		    the price you pay for living in a great neighborhood
+		    I guess.
+		    """
 	  else:
 	    print "I'm sorry, I didn't catch that?"
           
           question = raw_input("Do you have any other questions?  >")
           
-        lease = raw_input("Do you sign the lease or move on? >")
-              
-        if lease == "sign the lease":
-            ex45_fates.BadFate.bad_fate()
-        elif lease == "sign lease":
-            ex45_fates.BadFate.bad_fate()
-        elif lease == "move on":
-            print "It looks like you'll be living out of your car for a while. You lose."
-	    exit(1)
-        else:
-            print "come again?"
-            self.roomie()
-                                         
+        self.enter_3()
+                      
         
 class Map(object):
 
-    #Dictionary with reference_name:ClassInvocation
+    #So I can invoke classes with a simple key.
     fates = {"evil_landlord":EvilLandlord(),
              "ghetto":Ghetto(),
              "closet":Closet(),
@@ -361,19 +368,16 @@ class Map(object):
              "our_new_home":OurNewHome()
              }
               
-    def __init__(self, starting_apt):
-        #Make incoming variable accessible to following funcs   
+    def __init__(self, starting_apt):  
         self.starting_apt = starting_apt
         
        
     def ret_fates_name(self, fates_name):
-        #Return the val attached to the key 
         val = Map.fates.get(fates_name)
         return val
         
     
-    def init_fates_name(self):
-        #Instantiate above function using var(starting_apt) as key    
+    def init_fates_name(self):    
         return self.ret_fates_name(self.starting_apt)     
         
 

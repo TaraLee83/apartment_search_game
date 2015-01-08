@@ -79,7 +79,7 @@ bunking_with_strangers = """You walk up the steps of a large, two story house.
               		 going on somewhere in a room to the right.
 			 """
 			 
-part_2 =  """A fresh-faced college dude greets you. He tucks
+enter_2 =  """A fresh-faced college dude greets you. He tucks
           his long brown hair behind his ear and looks immediately
           apologetic for the argument going on in the next room.
           He whispers as he ushers you down the hall quickly.
@@ -94,7 +94,7 @@ part_2 =  """A fresh-faced college dude greets you. He tucks
           boyfriend. Apparently she can finish the tour for you.
           """	
           
-roomie = """When she finishes her argument she ducks into the kitchen
+enter_4 = """When she finishes her argument she ducks into the kitchen
          and apologizes. "My boyfriend is kind of an idiot sometimes."
          You talk for a while and come to the conclusion that the two
          out of four roommates that you are able to meet are nice enough.
