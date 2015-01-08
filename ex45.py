@@ -37,11 +37,11 @@ class Apartment(object):
             print "Your folks miss you anyway. Bye bye!"
             exit(1)
         elif answer == "go on":
-            self.enter()
+            pass
         elif answer == "next":
-            self.enter()
+            pass
         elif answer == "go on to the next":
-            self.enter()
+            pass
 
     def enter(self):
         print "This rooms desc."
